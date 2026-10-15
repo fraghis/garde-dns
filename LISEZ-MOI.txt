@@ -1,0 +1,33 @@
+GARDE DNS - mode d'emploi
+
+A) CONSTRUIRE L'APK (choisis UNE méthode)
+
+ Méthode 1 - Android Studio (sur PC)
+  1. Installe Android Studio (gratuit), ouvre ce dossier.
+  2. Attends la fin de la synchronisation.
+  3. Menu Build > Build APK(s). Le fichier est dans app/build/outputs/apk/debug/.
+
+ Méthode 2 - GitHub (sans rien installer)
+  1. Crée un compte sur github.com et un nouveau dépôt (repository).
+  2. Envoie tout le contenu de ce dossier (y compris le dossier caché .github).
+  3. Onglet "Actions" > attends la fin de "Build APK" > télécharge "GardeDNS-apk".
+
+B) INSTALLER SUR LE TELEPHONE
+  Copie l'APK sur le téléphone, ouvre-le, autorise l'installation de sources inconnues.
+
+C) UTILISER
+  1. Ouvre Garde DNS. Étape 1 : active "Garde DNS" dans Accessibilité.
+  2. Étape 2 : active l'anti-désinstallation (administrateur).
+  3. Coche les applications à bloquer de 21h à 6h.
+  4. Si l'app indique "DNS à régler à la main" : Réglages > Réseau > DNS privé >
+     Nom d'hôte du fournisseur : family.cloudflare-dns.com
+  5. Reviens dans l'app, choisis le délai (2 à 5 jours), appuie sur VERROUILLER.
+
+D) POUR DEVERROUILLER
+  Appuie sur "Demander le déverrouillage". Après le délai choisi, une fenêtre de
+  24 h s'ouvre : tu peux changer le DNS, retirer des apps, désactiver le verrou
+  ou autoriser la désinstallation. Ensuite le verrou se referme tout seul.
+
+E) OPTION (avec un PC) : DNS appliqué et maintenu automatiquement
+  Active le débogage USB, branche le téléphone et lance une seule fois :
+  adb shell pm grant cg.garde.dns android.permission.WRITE_SECURE_SETTINGS
