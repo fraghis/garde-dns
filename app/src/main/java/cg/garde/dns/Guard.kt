@@ -54,7 +54,8 @@ object Guard {
     fun isRisky(pkg: String, blocked: Set<String>) = pkg in blocked || pkg in BROWSERS || pkg in KEYWORD_APPS
     fun isSettingsLike(pkg: String) =
         pkg.contains("settings") || pkg.contains("packageinstaller") ||
-            pkg.contains("permissioncontroller") || pkg.contains("vending") || pkg.contains("lool")
+            pkg.contains("permissioncontroller") || pkg.contains("vending") || pkg.contains("lool") ||
+            pkg.contains("accessibility")
 
     // ---- Écrans protégés (textes cherchés dans les Réglages) ----
     private val SELF_TEXTS = listOf("Garde DNS")
@@ -91,10 +92,31 @@ object Guard {
         groups.add("Utilisateurs" to USER_TEXTS)
         for ((name, texts) in groups) {
             for (t in texts) {
-                if (root.findAccessibilityNodeInfosByText(t).isNotEmpty()) return name
+                if (exactVisible(root, t)) return name
             }
         }
         return null
+    }
+
+    /**
+     * Vrai seulement si un élément VISIBLE porte exactement ce texte (titre ou ligne de menu).
+     * Une simple mention dans un résumé (ex. « TalkBack, Audio mono… » sur la page principale
+     * des Réglages) ne bloque donc rien : les pages principales restent utilisables.
+     */
+    private fun exactVisible(root: AccessibilityNodeInfo, t: String): Boolean {
+        return try {
+            val nodes = root.findAccessibilityNodeInfosByText(t)
+            for (n in nodes) {
+                val txt = n.text?.toString()?.trim()
+                val desc = n.contentDescription?.toString()?.trim()
+                val same = (txt != null && txt.equals(t, ignoreCase = true)) ||
+                    (desc != null && desc.equals(t, ignoreCase = true))
+                if (same && n.isVisibleToUser) return true
+            }
+            false
+        } catch (e: Exception) {
+            false
+        }
     }
 
     fun nextDnsPageShown(root: AccessibilityNodeInfo) =

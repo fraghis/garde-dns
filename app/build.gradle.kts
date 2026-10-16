@@ -9,8 +9,8 @@ android {
         applicationId = "cg.garde.dns"
         minSdk = 26
         targetSdk = 33
-        versionCode = 2
-        versionName = "2.0"
+        versionCode = 3
+        versionName = "3.0"
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17

@@ -34,6 +34,13 @@ class GuardService : AccessibilityService() {
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
+        try {
+            handle(event)
+        } catch (e: Exception) {
+        }
+    }
+
+    private fun handle(event: AccessibilityEvent?) {
         val pkg = event?.packageName?.toString() ?: return
         if (pkg == packageName) return
         if (Guard.isEssential(pkg)) return
