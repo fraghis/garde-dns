@@ -1,33 +1,55 @@
-GARDE DNS - mode d'emploi
+GARDE DNS v2 - mode d'emploi
 
-A) CONSTRUIRE L'APK (choisis UNE méthode)
+A) CONSTRUIRE L'APK (GitHub, sans rien installer)
+  1. Sur github.com, ouvre ton dépôt actuel et remplace tout son contenu par celui de ce dossier
+     (y compris le dossier caché .github).
+  2. Onglet "Actions" > attends la fin de "Build APK" > télécharge "GardeDNS-apk".
+  3. Si la construction échoue, copie-moi le message d'erreur rouge.
 
- Méthode 1 - Android Studio (sur PC)
-  1. Installe Android Studio (gratuit), ouvre ce dossier.
-  2. Attends la fin de la synchronisation.
-  3. Menu Build > Build APK(s). Le fichier est dans app/build/outputs/apk/debug/.
+B) INSTALLER SUR LA TABLETTE
+  Copie l'APK, ouvre-le, autorise l'installation de sources inconnues.
+  Si tu avais l'ancienne version, installe par-dessus (même nom d'application).
 
- Méthode 2 - GitHub (sans rien installer)
-  1. Crée un compte sur github.com et un nouveau dépôt (repository).
-  2. Envoie tout le contenu de ce dossier (y compris le dossier caché .github).
-  3. Onglet "Actions" > attends la fin de "Build APK" > télécharge "GardeDNS-apk".
+C) PREPARER (dans l'ordre, l'app affiche une liste de contrôle en haut)
+  1. DNS privé (Samsung) : Réglages > Connexions > Plus de paramètres de connexion >
+     DNS privé > Nom d'hôte du fournisseur de DNS privé : e758ce.dns.nextdns.io
+  2. Dans l'app, bouton 1 : active "Garde DNS" dans Accessibilité.
+     Si Android refuse (paramètres restreints) : bouton 1 bis, puis menu ⋮ en haut à droite >
+     "Autoriser les paramètres restreints", puis recommence le bouton 1.
+  3. Bouton 2 : anti-désinstallation (administrateur).
+  4. Bouton 3 : batterie. Choisis "Non restreint" pour Garde DNS. Puis dans
+     Réglages > Batterie > Limites d'utilisation en arrière-plan : désactive
+     "Mettre les applis inutilisées en veille" et ajoute Garde DNS à "Applis jamais en veille".
+  6. Coche les applications à bloquer de 21h à 6h (Telegram est coché d'office).
+  7. Choisis le délai. Pour les premiers jours, garde "1 jour (période d'essai)".
+  8. Appuie sur VERROUILLER (bouton 4) (il faut être connecté à internet : l'heure est vérifiée en ligne).
 
-B) INSTALLER SUR LE TELEPHONE
-  Copie l'APK sur le téléphone, ouvre-le, autorise l'installation de sources inconnues.
+D) CE QUE FAIT L'APP
+  - Blocage de nuit (21h-6h, heure du Congo vérifiée sur internet) des applis cochées.
+  - Pendant le verrou, renvoie à l'accueil si tu ouvres les écrans : DNS privé, Garde DNS,
+    Accessibilité, Date et heure / fuseau horaire, partage de connexion (USB, Bluetooth, Ethernet),
+    VPN (ajout), utilisateurs / invité, Dossier sécurisé, pages NextDNS dans un navigateur.
+  - Si le DNS privé est changé : navigateurs, Telegram, X, Reddit, Instagram et applis cochées sont bloqués.
+  - L'écran Accessibilité est inaccessible pendant le verrou (il se rouvre pendant la fenêtre de déverrouillage).
+    Si la protection est quand même coupée par un autre moyen, c'est noté dans le journal.
+  - Détection de mots-clés (navigateurs, Telegram, X, Reddit, Instagram) :
+    "observation" = journal seulement, "active" = retour à l'accueil. Commence en observation.
+  - Journal personnel (bouton "Voir le journal") : rien n'est envoyé à personne.
+  - Bouton "J'ai envie" : pause de 10 minutes avec ton propre texte.
+  - Applis jamais bloquées : téléphone, SMS, contacts, appareil photo, horloge, cartes.
 
-C) UTILISER
-  1. Ouvre Garde DNS. Étape 1 : active "Garde DNS" dans Accessibilité.
-  2. Étape 2 : active l'anti-désinstallation (administrateur).
-  3. Coche les applications à bloquer de 21h à 6h.
-  4. Si l'app indique "DNS à régler à la main" : Réglages > Réseau > DNS privé >
-     Nom d'hôte du fournisseur : family.cloudflare-dns.com
-  5. Reviens dans l'app, choisis le délai (2 à 5 jours), appuie sur VERROUILLER.
+E) POUR DEVERROUILLER
+  "Demander le déverrouillage" (internet requis). Après le délai choisi, une fenêtre de 24 h
+  s'ouvre : tu peux changer le DNS, retirer des apps, désactiver le verrou ou autoriser la
+  désinstallation. Ensuite le verrou se referme tout seul.
 
-D) POUR DEVERROUILLER
-  Appuie sur "Demander le déverrouillage". Après le délai choisi, une fenêtre de
-  24 h s'ouvre : tu peux changer le DNS, retirer des apps, désactiver le verrou
-  ou autoriser la désinstallation. Ensuite le verrou se referme tout seul.
-
-E) OPTION (avec un PC) : DNS appliqué et maintenu automatiquement
-  Active le débogage USB, branche le téléphone et lance une seule fois :
-  adb shell pm grant cg.garde.dns android.permission.WRITE_SECURE_SETTINGS
+F) LIMITES CONNUES (sans PC)
+  - Le mode sans échec de Samsung (volume bas au démarrage) désactive les applis tierces.
+    L'app le note dans le journal ("trou de surveillance") mais ne peut pas l'empêcher.
+  - Le blocage de l'écran Accessibilité repose sur des textes d'écran. Les raccourcis d'accessibilité
+    (touches de volume, bouton) ne peuvent pas être bloqués. La vraie solution est le mode
+    propriétaire (une commande adb sur PC).
+  - Le bouton "Point d'accès" du panneau rapide n'est pas bloqué : retire-le du panneau
+    (Modifier les boutons). Le partage de connexion actif est noté dans le journal.
+  - Les textes d'écran dépendent de la version d'Android : si un écran n'est pas bloqué ou si un
+    écran utile l'est à tort, dis-le moi avec le nom de l'écran.
