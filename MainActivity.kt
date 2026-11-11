@@ -37,23 +37,16 @@ class AppItem(val pkg: String, val label: String, val icon: Drawable)
 class MainActivity : Activity() {
 
     // Palette
-    private val BG = Color.parseColor("#07090D")
-    private val CARD = Color.parseColor("#10141B")
-    private val CARD2 = Color.parseColor("#171C25")
-    private val LINE = Color.parseColor("#232A36")
-    private val TXT = Color.parseColor("#F3F5F8")
-    private val SUB = Color.parseColor("#7D8899")
-    private val ACCENT = Color.parseColor("#34E3B0")
-    private val ACCENT2 = Color.parseColor("#3BC9F5")
-    private val ACCENT_DARK = Color.parseColor("#04201A")
-    private val WARN = Color.parseColor("#FFC15E")
-    private val BAD = Color.parseColor("#FF7A7A")
-    private val DLG = android.R.style.Theme_DeviceDefault_Dialog_Alert
-    private lateinit var heroCard: LinearLayout
-    private lateinit var heroIcon: TextView
-    private lateinit var progFill: View
-    private lateinit var progRest: View
-    private lateinit var progLabel: TextView
+    private val BG = Color.parseColor("#0E1116")
+    private val CARD = Color.parseColor("#171B22")
+    private val CARD2 = Color.parseColor("#1F2530")
+    private val LINE = Color.parseColor("#2A313D")
+    private val TXT = Color.parseColor("#EEF1F5")
+    private val SUB = Color.parseColor("#8C96A5")
+    private val ACCENT = Color.parseColor("#2DD4A3")
+    private val ACCENT_DARK = Color.parseColor("#0B2A22")
+    private val WARN = Color.parseColor("#F5B547")
+    private val BAD = Color.parseColor("#F26D6D")
 
     private lateinit var heroTitle: TextView
     private lateinit var heroSub: TextView
@@ -82,14 +75,6 @@ class MainActivity : Activity() {
         if (stroke != 0) it.setStroke(dp(1), stroke)
     }
 
-    private fun gradient(c1: Int, c2: Int, radius: Int, stroke: Int = 0) =
-        GradientDrawable(GradientDrawable.Orientation.TL_BR, intArrayOf(c1, c2)).also {
-            it.cornerRadius = dp(radius).toFloat()
-            if (stroke != 0) it.setStroke(dp(1), stroke)
-        }
-
-    private fun alpha(c: Int, a: Int) = Color.argb(a, Color.red(c), Color.green(c), Color.blue(c))
-
     private fun ripple(bg: Drawable) = RippleDrawable(ColorStateList.valueOf(Color.parseColor("#33FFFFFF")), bg, null)
 
     private fun lp(top: Int = 0) = LinearLayout.LayoutParams(
@@ -107,10 +92,8 @@ class MainActivity : Activity() {
     /** Bouton principal (plein) */
     private fun primaryButton(t: String, onClick: () -> Unit) = text(t, 16f, ACCENT_DARK, true).also {
         it.gravity = Gravity.CENTER
-        it.setPadding(dp(16), dp(17), dp(16), dp(17))
-        it.letterSpacing = 0.02f
-        it.background = ripple(gradient(ACCENT, ACCENT2, 18))
-        it.elevation = dp(6).toFloat()
+        it.setPadding(dp(16), dp(15), dp(16), dp(15))
+        it.background = ripple(rounded(ACCENT, 14))
         it.isClickable = true
         it.setOnClickListener { onClick() }
         it.layoutParams = lp(14)
@@ -119,8 +102,8 @@ class MainActivity : Activity() {
     /** Bouton secondaire (contour) */
     private fun ghostButton(t: String, color: Int = TXT, onClick: () -> Unit) = text(t, 15f, color, true).also {
         it.gravity = Gravity.CENTER
-        it.setPadding(dp(16), dp(15), dp(16), dp(15))
-        it.background = ripple(rounded(CARD2, 18, LINE))
+        it.setPadding(dp(16), dp(13), dp(16), dp(13))
+        it.background = ripple(rounded(CARD2, 14, LINE))
         it.isClickable = true
         it.setOnClickListener { onClick() }
         it.layoutParams = lp(10)
@@ -131,16 +114,16 @@ class MainActivity : Activity() {
         val row = LinearLayout(this)
         row.orientation = LinearLayout.HORIZONTAL
         row.gravity = Gravity.CENTER_VERTICAL
-        row.setPadding(dp(14), dp(14), dp(16), dp(14))
-        row.background = ripple(rounded(CARD2, 18, LINE))
+        row.setPadding(dp(14), dp(14), dp(14), dp(14))
+        row.background = ripple(rounded(CARD2, 14))
         row.isClickable = true
         row.setOnClickListener { onClick() }
         row.layoutParams = lp(10)
 
         val badge = text(num, 14f, ACCENT, true)
         badge.gravity = Gravity.CENTER
-        badge.background = gradient(alpha(ACCENT, 40), alpha(ACCENT2, 25), 14)
-        badge.layoutParams = LinearLayout.LayoutParams(dp(42), dp(42))
+        badge.background = rounded(ACCENT_DARK, 18)
+        badge.layoutParams = LinearLayout.LayoutParams(dp(36), dp(36))
 
         val col = LinearLayout(this)
         col.orientation = LinearLayout.VERTICAL
@@ -152,23 +135,19 @@ class MainActivity : Activity() {
 
         row.addView(badge)
         row.addView(col)
-        val arrow = text("→", 18f, SUB)
-        arrow.background = rounded(alpha(TXT, 10), 14)
-        arrow.gravity = Gravity.CENTER
-        arrow.layoutParams = LinearLayout.LayoutParams(dp(30), dp(30))
-        row.addView(arrow)
+        row.addView(text("›", 22f, SUB))
         return row
     }
 
     private fun card(title: String, vararg children: View): LinearLayout {
         val c = LinearLayout(this)
         c.orientation = LinearLayout.VERTICAL
-        c.setPadding(dp(20), dp(20), dp(20), dp(20))
-        c.background = rounded(CARD, 26, LINE)
+        c.setPadding(dp(18), dp(18), dp(18), dp(18))
+        c.background = rounded(CARD, 22)
         c.layoutParams = lp(16)
         if (title.isNotEmpty()) {
-            val t = text(title, 18f, TXT, true)
-            t.letterSpacing = -0.01f
+            val t = text(title.uppercase(), 12f, SUB, true)
+            t.letterSpacing = 0.1f
             c.addView(t)
         }
         children.forEach { c.addView(it) }
@@ -206,58 +185,24 @@ class MainActivity : Activity() {
 
         val header = LinearLayout(this)
         header.orientation = LinearLayout.VERTICAL
-        header.setPadding(dp(18), dp(40), dp(18), dp(8))
+        header.setPadding(dp(18), dp(36), dp(18), dp(8))
 
-        // ----- Barre du haut -----
-        val top = LinearLayout(this)
-        top.orientation = LinearLayout.HORIZONTAL
-        top.gravity = Gravity.CENTER_VERTICAL
-        val logo = text("◆", 16f, ACCENT_DARK, true)
-        logo.gravity = Gravity.CENTER
-        logo.background = gradient(ACCENT, ACCENT2, 12)
-        logo.layoutParams = LinearLayout.LayoutParams(dp(34), dp(34))
-        top.addView(logo)
-        val app = text("Garde DNS", 18f, TXT, true)
-        app.layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f).also { it.leftMargin = dp(12) }
-        top.addView(app)
-        heroPill = text("", 11f, ACCENT, true)
-        heroPill.letterSpacing = 0.08f
-        heroPill.setPadding(dp(12), dp(7), dp(12), dp(7))
-        top.addView(heroPill)
-        header.addView(top)
-
-        // ----- Carte d'état -----
-        heroCard = LinearLayout(this)
-        heroCard.orientation = LinearLayout.VERTICAL
-        heroCard.setPadding(dp(22), dp(24), dp(22), dp(22))
-        heroCard.layoutParams = lp(20)
-        heroIcon = text("", 28f, ACCENT, true)
-        heroIcon.gravity = Gravity.CENTER
-        heroIcon.layoutParams = LinearLayout.LayoutParams(dp(60), dp(60))
-        heroCard.addView(heroIcon)
-        heroTitle = text("", 32f, TXT, true)
-        heroTitle.letterSpacing = -0.02f
-        heroTitle.layoutParams = lp(16)
-        heroCard.addView(heroTitle)
+        // ----- Bandeau d'état -----
+        val app = text("GARDE DNS", 12f, ACCENT, true)
+        app.letterSpacing = 0.18f
+        header.addView(app)
+        heroTitle = text("", 30f, TXT, true)
+        heroTitle.layoutParams = lp(6)
+        header.addView(heroTitle)
         heroSub = text("", 14f, SUB)
         heroSub.layoutParams = lp(4)
-        heroCard.addView(heroSub)
-        val prog = LinearLayout(this)
-        prog.orientation = LinearLayout.HORIZONTAL
-        prog.background = rounded(alpha(TXT, 18), 4)
-        prog.layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp(6)).also { it.topMargin = dp(20) }
-        progFill = View(this)
-        progFill.background = gradient(ACCENT, ACCENT2, 4)
-        progFill.layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 0f)
-        progRest = View(this)
-        progRest.layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1f)
-        prog.addView(progFill)
-        prog.addView(progRest)
-        heroCard.addView(prog)
-        progLabel = text("", 12f, SUB, true)
-        progLabel.layoutParams = lp(8)
-        heroCard.addView(progLabel)
-        header.addView(heroCard)
+        header.addView(heroSub)
+        heroPill = text("", 13f, ACCENT, true)
+        heroPill.setPadding(dp(12), dp(6), dp(12), dp(6))
+        heroPill.layoutParams = LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
+        ).also { it.topMargin = dp(12) }
+        header.addView(heroPill)
 
         // ----- Vérifications -----
         checks = LinearLayout(this)
@@ -294,7 +239,7 @@ class MainActivity : Activity() {
         dnsInput.setHintTextColor(SUB)
         dnsInput.textSize = 15f
         dnsInput.setPadding(dp(14), dp(13), dp(14), dp(13))
-        dnsInput.background = rounded(CARD2, 16, LINE)
+        dnsInput.background = rounded(CARD2, 12, LINE)
         dnsInput.layoutParams = lp(6)
 
         daysSpinner = Spinner(this)
@@ -309,14 +254,13 @@ class MainActivity : Activity() {
             }
         }
         daysSpinner.setSelection((Guard.delayDays(this) - 1).coerceIn(0, 4))
-        daysSpinner.background = rounded(CARD2, 16, LINE)
-        daysSpinner.setPadding(dp(8), dp(8), dp(8), dp(8))
+        daysSpinner.background = rounded(CARD2, 12, LINE)
+        daysSpinner.setPadding(dp(6), dp(4), dp(6), dp(4))
         daysSpinner.layoutParams = lp(6)
 
         dnsHint = text("", 13f, WARN)
         dnsHint.setPadding(dp(12), dp(10), dp(12), dp(10))
-        dnsHint.setPadding(dp(14), dp(12), dp(14), dp(12))
-        dnsHint.background = rounded(alpha(WARN, 22), 16, alpha(WARN, 60))
+        dnsHint.background = rounded(Color.parseColor("#2A2213"), 12)
         dnsHint.layoutParams = lp(14)
 
         btnLock = primaryButton("Verrouiller") { doLock() }
@@ -352,19 +296,18 @@ class MainActivity : Activity() {
         listOf(btnRequest, btnCancel, btnDisable, btnUninstall).forEach { header.addView(it) }
 
         // ----- Outils -----
-        btnKw = text("", 12f, SUB)
-        val craving = tile("⏱", "J'ai envie", "Pause de 10 minutes", true) { showCraving() }
-        val note = tile("✎", "Mon texte", "Pour ces moments") { editNote() }
-        val journal = tile("☰", "Journal", "Rien n'est envoyé") { showJournal() }
-        val kw = tile("⌕", "Mots-clés", "", false, btnKw) { cycleKeywords() }
-        header.addView(card("Outils", gridRow(craving, note), gridRow(journal, kw)))
+        btnKw = ghostButton("") { cycleKeywords() }
+        header.addView(card("Outils",
+            ghostButton("J'ai envie : pause de 10 minutes", ACCENT) { showCraving() },
+            ghostButton("Écrire mon texte pour ces moments") { editNote() },
+            ghostButton("Voir le journal") { showJournal() },
+            btnKw
+        ))
 
-        val appsTitle = text("Applications bloquées", 18f, TXT, true)
-        appsTitle.setPadding(dp(4), dp(28), 0, 0)
+        val appsTitle = text("APPLICATIONS BLOQUÉES DE 21H À 6H", 12f, SUB, true)
+        appsTitle.letterSpacing = 0.1f
+        appsTitle.setPadding(dp(4), dp(26), 0, dp(4))
         header.addView(appsTitle)
-        val appsSub = text("De 21h à 6h, heure du Congo", 13f, SUB)
-        appsSub.setPadding(dp(4), dp(2), 0, dp(8))
-        header.addView(appsSub)
 
         val lv = ListView(this)
         lv.setBackgroundColor(BG)
@@ -438,40 +381,9 @@ class MainActivity : Activity() {
         refresh()
     }
 
-    private fun tile(icon: String, title: String, sub: String, hot: Boolean = false, subView: TextView? = null, onClick: () -> Unit): View {
-        val t = LinearLayout(this)
-        t.orientation = LinearLayout.VERTICAL
-        t.setPadding(dp(16), dp(16), dp(16), dp(16))
-        t.background = ripple(if (hot) gradient(alpha(ACCENT, 45), alpha(ACCENT2, 20), 20, alpha(ACCENT, 90)) else rounded(CARD2, 20, LINE))
-        t.isClickable = true
-        t.setOnClickListener { onClick() }
-        val ic = text(icon, 18f, if (hot) ACCENT else TXT, true)
-        ic.gravity = Gravity.CENTER
-        ic.background = rounded(alpha(TXT, 14), 12)
-        ic.layoutParams = LinearLayout.LayoutParams(dp(38), dp(38))
-        t.addView(ic)
-        val tt = text(title, 15f, TXT, true)
-        tt.layoutParams = lp(14)
-        t.addView(tt)
-        val sv = subView ?: text(sub, 12f, SUB)
-        t.addView(sv)
-        t.layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1f)
-        return t
-    }
-
-    private fun gridRow(a: View, b: View): View {
-        val r = LinearLayout(this)
-        r.orientation = LinearLayout.HORIZONTAL
-        r.layoutParams = lp(12)
-        (b.layoutParams as LinearLayout.LayoutParams).leftMargin = dp(12)
-        r.addView(a)
-        r.addView(b)
-        return r
-    }
-
     private fun showJournal() {
         val j = Guard.journal(this)
-        AlertDialog.Builder(this, DLG)
+        AlertDialog.Builder(this)
             .setTitle("Journal (rien n'est envoyé nulle part)")
             .setMessage(if (j.isBlank()) "Vide pour l'instant." else j)
             .setPositiveButton("OK", null)
@@ -482,9 +394,8 @@ class MainActivity : Activity() {
         val note = Guard.note(this)
         val tv = TextView(this)
         tv.textSize = 16f
-        tv.setTextColor(TXT)
         tv.setPadding(dp(20), dp(16), dp(20), dp(8))
-        val dlg = AlertDialog.Builder(this, DLG)
+        val dlg = AlertDialog.Builder(this)
             .setTitle("Pause de 10 minutes")
             .setView(tv)
             .setPositiveButton("Fermer", null)
@@ -510,9 +421,8 @@ class MainActivity : Activity() {
         val et = EditText(this)
         et.setText(Guard.note(this))
         et.minLines = 4
-        et.setTextColor(TXT)
         et.gravity = Gravity.TOP
-        AlertDialog.Builder(this, DLG)
+        AlertDialog.Builder(this)
             .setTitle("Mon texte pour les moments difficiles")
             .setView(et)
             .setPositiveButton("Enregistrer") { _, _ -> Guard.setNote(this, et.text.toString()) }
@@ -537,7 +447,7 @@ class MainActivity : Activity() {
         bg.shape = GradientDrawable.OVAL
         bg.setColor(Color.argb(40, Color.red(color), Color.green(color), Color.blue(color)))
         dot.background = bg
-        dot.layoutParams = LinearLayout.LayoutParams(dp(28), dp(28))
+        dot.layoutParams = LinearLayout.LayoutParams(dp(26), dp(26))
         val t = text(label, 14f, TXT)
         val tp = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
         tp.leftMargin = dp(12)
@@ -568,12 +478,6 @@ class MainActivity : Activity() {
         checks.addView(checkRow(if (t) 0 else 1,
             if (t) "Heure vérifiée sur internet" else "Heure non vérifiée (internet requis)"))
 
-        val okCount = listOf(Guard.accessibilityOn(this), Guard.adminActive(this), batt, Guard.dnsOk(this), t).count { it }
-        (progFill.layoutParams as LinearLayout.LayoutParams).weight = okCount.toFloat()
-        (progRest.layoutParams as LinearLayout.LayoutParams).weight = (5 - okCount).toFloat()
-        progFill.requestLayout()
-        progLabel.text = "$okCount / 5 vérifications au vert"
-
         val pillColor: Int
         when {
             !locked -> {
@@ -598,17 +502,14 @@ class MainActivity : Activity() {
             }
         }
         heroPill.setTextColor(pillColor)
-        heroPill.background = rounded(alpha(pillColor, 30), 20, alpha(pillColor, 80))
-        heroIcon.text = if (locked) "🔒" else "🔓"
-        heroIcon.background = gradient(alpha(pillColor, 70), alpha(pillColor, 20), 20)
-        heroCard.background = gradient(alpha(pillColor, 38), CARD, 28, alpha(pillColor, 70))
+        heroPill.background = rounded(Color.argb(38, Color.red(pillColor), Color.green(pillColor), Color.blue(pillColor)), 20)
 
         val needDns = !locked && !Guard.dnsOk(this, dnsInput.text.toString().trim()) && !Guard.hasSecurePermission(this)
         dnsHint.text = "Avant de verrouiller, règle le DNS à la main : Réglages › Connexions › " +
             "Plus de paramètres de connexion › DNS privé › Nom d'hôte du fournisseur : ${Guard.dns(this)}"
         show(dnsHint, needDns)
 
-        btnKw.text = "${Guard.kwName(Guard.kwMode(this))} · toucher pour changer"
+        btnKw.text = "Mots-clés : ${Guard.kwName(Guard.kwMode(this))}  ·  changer"
         show(lockCard, !locked)
         show(btnRequest, locked && !pending && !open)
         show(btnCancel, pending)
@@ -626,18 +527,18 @@ class MainActivity : Activity() {
             val item = items[position]
             val on = item.pkg in selected
             val outer = LinearLayout(this@MainActivity)
-            outer.setPadding(dp(18), dp(5), dp(18), dp(5))
+            outer.setPadding(dp(18), dp(4), dp(18), dp(4))
 
             val row = LinearLayout(this@MainActivity)
             row.orientation = LinearLayout.HORIZONTAL
             row.gravity = Gravity.CENTER_VERTICAL
-            row.setPadding(dp(14), dp(12), dp(12), dp(12))
-            row.background = if (on) gradient(alpha(ACCENT, 28), CARD, 20, alpha(ACCENT, 110)) else rounded(CARD, 20, LINE)
+            row.setPadding(dp(14), dp(10), dp(10), dp(10))
+            row.background = rounded(CARD, 16, if (on) ACCENT else 0)
             row.layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
 
             val icon = ImageView(this@MainActivity)
             icon.setImageDrawable(item.icon)
-            icon.layoutParams = LinearLayout.LayoutParams(dp(42), dp(42))
+            icon.layoutParams = LinearLayout.LayoutParams(dp(38), dp(38))
 
             val name = text(item.label, 15f, TXT, true)
             val nameParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
