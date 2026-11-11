@@ -1,4 +1,20 @@
 plugins {
-    id("com.android.application") version "8.5.2" apply false
-    id("org.jetbrains.kotlin.android") version "1.9.24" apply false
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+}
+android {
+    namespace = "cg.garde.dns"
+    compileSdk = 34
+    defaultConfig {
+        applicationId = "cg.garde.dns"
+        minSdk = 26
+        targetSdk = 33
+        versionCode = 4
+        versionName = "3.1"
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+    kotlinOptions { jvmTarget = "17" }
 }

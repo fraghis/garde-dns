@@ -1,14 +1,19 @@
-GARDE DNS v2 - mode d'emploi
+GARDE DNS v3.1 - mode d'emploi
 
 A) CONSTRUIRE L'APK (GitHub, sans rien installer)
   1. Sur github.com, ouvre ton dépôt actuel et remplace tout son contenu par celui de ce dossier
-     (y compris le dossier caché .github).
+     (y compris le dossier caché .github et le fichier debug.keystore.b64).
   2. Onglet "Actions" > attends la fin de "Build APK" > télécharge "GardeDNS-apk".
   3. Si la construction échoue, copie-moi le message d'erreur rouge.
 
 B) INSTALLER SUR LA TABLETTE
   Copie l'APK, ouvre-le, autorise l'installation de sources inconnues.
   Si tu avais l'ancienne version, installe par-dessus (même nom d'application).
+  Nouveauté v3.1 : tous les APK sont maintenant signés avec la même clé (debug.keystore.b64), donc
+  les prochaines mises à jour se feront toujours par-dessus. Mais la PREMIÈRE installation de la 3.1
+  peut afficher "Application non installée" si l'ancien APK avait une autre signature : dans ce cas,
+  désinstalle l'ancienne version (si elle est verrouillée : "Demander le déverrouillage", attendre
+  la fin du délai, puis autoriser la désinstallation), puis installe la 3.1.
 
 C) PREPARER (dans l'ordre, l'app affiche une liste de contrôle en haut)
   1. DNS privé (Samsung) : Réglages > Connexions > Plus de paramètres de connexion >
@@ -35,6 +40,11 @@ D) CE QUE FAIT L'APP
   - Détection de mots-clés (navigateurs, Telegram, X, Reddit, Instagram) :
     "observation" = journal seulement, "active" = retour à l'accueil. Commence en observation.
   - Journal personnel (bouton "Voir le journal") : rien n'est envoyé à personne.
+    En bas du journal, la section "Écrans vus dans les Réglages" (diagnostic) liste les derniers écrans
+    ouverts avec leur nom exact, et ceux qui ont été bloqués ("-> BLOQUÉ"). Utile pour signaler un écran
+    qui passe encore.
+  - Nouveauté v3.1 : les écrans des Réglages sont reconnus par le nom de la fenêtre et son titre (plus
+    fiable que les textes de la page), et relus toutes les 500 ms tant que tu es dans les Réglages.
   - Bouton "J'ai envie" : pause de 10 minutes avec ton propre texte.
   - Applis jamais bloquées : téléphone, SMS, contacts, appareil photo, horloge, cartes.
 
@@ -46,7 +56,7 @@ E) POUR DEVERROUILLER
 F) LIMITES CONNUES (sans PC)
   - Le mode sans échec de Samsung (volume bas au démarrage) désactive les applis tierces.
     L'app le note dans le journal ("trou de surveillance") mais ne peut pas l'empêcher.
-  - Le blocage de l'écran Accessibilité repose sur des textes d'écran. Les raccourcis d'accessibilité
+  - Le blocage de l'écran Accessibilité repose sur le nom et le titre de la fenêtre, puis sur des textes d'écran. Les raccourcis d'accessibilité
     (touches de volume, bouton) ne peuvent pas être bloqués. La vraie solution est le mode
     propriétaire (une commande adb sur PC).
   - Le bouton "Point d'accès" du panneau rapide n'est pas bloqué : retire-le du panneau
